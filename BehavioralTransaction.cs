@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lab8_OOP2
 {
@@ -10,29 +7,38 @@ namespace Lab8_OOP2
     {
         public List<Customer> Customers { get; set; }
         public List<Product> Products { get; set; }
-        private Dictionary<Customer, List<Product>> CustomerProducts; 
+
+        private Dictionary<Customer, List<Product>> CustomerProducts;
+        private Dictionary<Product, List<Customer>> ProductCustomers;
 
         public BehavioralTransaction()
         {
             Customers = new List<Customer>();
             Products = new List<Product>();
             CustomerProducts = new Dictionary<Customer, List<Product>>();
+            ProductCustomers = new Dictionary<Product, List<Customer>>();
         }
 
+        // Association: quan hệ 2 chiều giữa Customer và Product
         public void AddCustomerProductAssociation(Customer customer, Product product)
         {
             if (!Customers.Contains(customer))
                 Customers.Add(customer);
-
             if (!Products.Contains(product))
                 Products.Add(product);
 
             if (!CustomerProducts.ContainsKey(customer))
                 CustomerProducts[customer] = new List<Product>();
-
             CustomerProducts[customer].Add(product);
+
+            if (!ProductCustomers.ContainsKey(product))
+                ProductCustomers[product] = new List<Customer>();
+            if (!ProductCustomers[product].Contains(customer))
+                ProductCustomers[product].Add(customer);
         }
-         public void RecordOrder(Order order)
+
+        // Ghi nhận đơn hàng
+        public void RecordOrder(Order order)
         {
             Customer customer = order.Customer;
             for (int i = 0; i < order.Details.Count; i++)
@@ -46,11 +52,13 @@ namespace Lab8_OOP2
             }
         }
 
+        // Xây dựng lại mapping từ danh sách đơn hàng
         public void RebuildMappings(List<Order> orders)
         {
             Customers.Clear();
             Products.Clear();
             CustomerProducts.Clear();
+            ProductCustomers.Clear();
 
             for (int i = 0; i < orders.Count; i++)
             {
@@ -58,7 +66,6 @@ namespace Lab8_OOP2
             }
         }
 
-        // Hiển thị khách hàng mua nhiều sản phẩm
         public void DisplayCustomerProducts(Customer customer)
         {
             if (CustomerProducts.ContainsKey(customer))
@@ -71,18 +78,16 @@ namespace Lab8_OOP2
             }
         }
 
-        // Hiển thị một sản phẩm được nhiều khách hàng mua
         public void DisplayProductCustomers(Product product)
         {
-            Console.WriteLine($"\nSản phẩm '{product.Name}' được mua bởi:");
-            foreach (KeyValuePair<Customer, List<Product>> entry in CustomerProducts)
+            if (ProductCustomers.ContainsKey(product))
             {
-                if (entry.Value.Contains(product))
+                Console.WriteLine($"\nSản phẩm '{product.Name}' được mua bởi:");
+                foreach (Customer customer in ProductCustomers[product])
                 {
-                    Console.WriteLine($"- {entry.Key.Name}");
+                    Console.WriteLine($"- {customer.Name}");
                 }
             }
         }
     }
-
 }

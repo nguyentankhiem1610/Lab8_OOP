@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lab8_OOP2
 {
@@ -22,7 +19,12 @@ namespace Lab8_OOP2
         public void AddProduct(Product product, int quantity)
         {
             Details.Add(new OrderDetail(product, quantity));
-            product.Quantity -= quantity;
+            product.Quantity -= quantity; // trừ hàng trong kho
+        }
+
+        public void RemoveAllDetails()
+        {
+            Details.Clear(); // Composition: xoá chi tiết khi xoá đơn
         }
 
         public double GetTotal()

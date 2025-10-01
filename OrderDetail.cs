@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Lab8_OOP2
 {
@@ -27,5 +23,4 @@ namespace Lab8_OOP2
             Console.WriteLine($"   {Product.Name} | SL: {Quantity} | Thành tiền: {GetTotal()}");
         }
     }
-
 }
