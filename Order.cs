@@ -19,12 +19,31 @@ namespace Lab8_OOP2
         public void AddProduct(Product product, int quantity)
         {
             Details.Add(new OrderDetail(product, quantity));
-            product.Quantity -= quantity; // trừ hàng trong kho
+            product.Quantity -= quantity; 
         }
 
         public void RemoveAllDetails()
         {
-            Details.Clear(); // Composition: xoá chi tiết khi xoá đơn
+            Details.Clear();
+        }
+
+        public void RemoveOrder(Store store)
+        {
+            for (int i = 0; i < Details.Count; i++)
+            {
+                Product product = Details[i].Product;
+                int quantity = Details[i].Quantity;
+
+                store.Warehouse.RestoreProductQuantity(product.Id, quantity);
+            }
+
+            RemoveAllDetails();
+
+            store.Orders.Remove(this);
+
+            store.BehavioralTransaction.RebuildMappings(store.Orders);
+
+            Console.WriteLine("Đã xóa đơn " + OrderId + " và trả sản phẩm về kho.");
         }
 
         public double GetTotal()

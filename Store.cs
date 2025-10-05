@@ -5,7 +5,7 @@ namespace Lab8_OOP2
 {
     public class Store
     {
-        private static Store instance;
+        private static Store? instance;
         public WareHouse Warehouse { get; private set; }
         public List<Customer> Customers { get; private set; }
         public List<Order> Orders { get; private set; }
@@ -36,10 +36,9 @@ namespace Lab8_OOP2
             o.Customer.AddOrder(o);
             BehavioralTransaction.RecordOrder(o);
         }
-
         public void RemoveOrder(string orderId)
         {
-            Order found = null;
+            Order? found = null;
             for (int i = 0; i < Orders.Count; i++)
             {
                 if (Orders[i].OrderId == orderId)
@@ -51,38 +50,11 @@ namespace Lab8_OOP2
 
             if (found != null)
             {
-                // Trả sản phẩm về kho
-                for (int i = 0; i < found.Details.Count; i++)
-                {
-                    Product product = found.Details[i].Product;
-                    int quantity = found.Details[i].Quantity;
-
-                    // Tìm trong kho sản phẩm tương ứng
-                    Product productInWarehouse = null;
-                    for (int j = 0; j < Warehouse.Products.Count; j++)
-                    {
-                        if (Warehouse.Products[j].Id == product.Id)
-                        {
-                            productInWarehouse = Warehouse.Products[j];
-                            break;
-                        }
-                    }
-
-                    if (productInWarehouse != null)
-                    {
-                        productInWarehouse.Quantity += quantity; // trả về kho
-                    }
-                }
-
-                // Xóa hết chi tiết đơn hàng (Composition)
-                found.RemoveAllDetails();
-                // Xóa đơn hàng khỏi danh sách
-                Orders.Remove(found);
-
-                // Cập nhật lại mapping hành vi
-                BehavioralTransaction.RebuildMappings(Orders);
-
-                Console.WriteLine("Đã xóa đơn " + orderId + " và trả sản phẩm về kho.");
+                found.RemoveOrder(this);
+            }
+            else
+            {
+                Console.WriteLine("Không tìm thấy đơn hàng " + orderId);
             }
         }
 

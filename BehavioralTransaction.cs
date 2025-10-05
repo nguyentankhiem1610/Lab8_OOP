@@ -19,7 +19,6 @@ namespace Lab8_OOP2
             ProductCustomers = new Dictionary<Product, List<Customer>>();
         }
 
-        // Association: quan hệ 2 chiều giữa Customer và Product
         public void AddCustomerProductAssociation(Customer customer, Product product)
         {
             if (!Customers.Contains(customer))
@@ -33,11 +32,11 @@ namespace Lab8_OOP2
 
             if (!ProductCustomers.ContainsKey(product))
                 ProductCustomers[product] = new List<Customer>();
+
             if (!ProductCustomers[product].Contains(customer))
                 ProductCustomers[product].Add(customer);
         }
 
-        // Ghi nhận đơn hàng
         public void RecordOrder(Order order)
         {
             Customer customer = order.Customer;
@@ -52,7 +51,6 @@ namespace Lab8_OOP2
             }
         }
 
-        // Xây dựng lại mapping từ danh sách đơn hàng
         public void RebuildMappings(List<Order> orders)
         {
             Customers.Clear();
@@ -77,7 +75,6 @@ namespace Lab8_OOP2
                 }
             }
         }
-
         public void DisplayProductCustomers(Product product)
         {
             if (ProductCustomers.ContainsKey(product))
